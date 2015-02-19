@@ -5,6 +5,7 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"path/filepath"
 )
 
 type SitemapGroup struct {
@@ -38,7 +39,7 @@ func (s *SitemapGroup) getSitemapName() string {
 func (s *SitemapGroup) createXML(group URLSet) (sitemapXml []byte) {
 	sitemapXml, err := createSitemapXml(group)
 	if err != nil {
-		log.Fatal("work failed:", err)
+		log.Println("SITEMAP - work failed:", err)
 	}
 	return
 }
@@ -49,17 +50,17 @@ func (s *SitemapGroup) Create(url_set URLSet) {
 
 	xml := s.createXML(url_set)
 	sitemap_name := s.getSitemapName()
-	path = s.folder + sitemap_name
-
+	path = filepath.Join(s.folder, sitemap_name)
+	
 	err := saveXml(xml, path)
 
 	if err != nil {
-		log.Fatal("File not saved:", err)
+		log.Println("SITEMAP - File not saved:", err)
 	}
 	savedSitemaps = append(savedSitemaps, sitemap_name)
 	s.group_count++
 
-	log.Printf("Sitemap created on %s", path)
+	log.Println("SITEMAP - Sitemap created on", path)
 
 }
 
@@ -91,7 +92,7 @@ func (s *SitemapGroup) Configure(name string, folder string) {
 	s.group_count = 1
 	_, err := ioutil.ReadDir(folder)
 	if err != nil {
-		log.Fatal("Dir not allowed - ", err)
+		log.Println("SITEMAP - Dir not allowed - ", err)
 	}
 	s.folder = folder
 }

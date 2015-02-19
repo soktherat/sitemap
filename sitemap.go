@@ -112,7 +112,7 @@ func CreateSitemapIndex(indexFilePath string, index Index) (err error) {
 		return err
 	}
 	err = saveXml(indexXml, indexFilePath)
-	log.Printf("Sitemap Index created on %s", indexFilePath)
+	log.Println("SITEMAP - Sitemap Index created on", indexFilePath)
 	return err
 }
 
@@ -127,7 +127,7 @@ func PingSearchEngines(indexFile string) {
 	results := asyncHttpGets(urls)
 
 	for result := range results {
-		log.Printf("%s status: %s\n", result.url, result.response.Status)
+		log.Printf("SITEMAP - %s status: %s\n", result.url, result.response.Status)
 	}
 
 }
@@ -147,7 +147,7 @@ func asyncHttpGets(urls []string) chan HttpResponse {
 			go func(url string) {
 				resp, err := http.Get(url)
 				if err != nil {
-					log.Println("error", resp, err)
+					log.Println("SITEMAP - error", resp, err)
 					wg.Done()
 					return
 				}
